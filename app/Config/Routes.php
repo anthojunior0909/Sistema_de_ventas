@@ -11,3 +11,4 @@ $routes->post('auth/attemptLogin', 'AuthController::attemptLogin'); // Procesa e
 $routes->get('logout', 'AuthController::logout'); // Cierra la sesión
 // --- Ruta del Dashboard ---
 $routes->get('dashboard', 'DashboardController::index');
+$routes->resource('productos', ['controller' => 'ProductosController']);
