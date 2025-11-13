@@ -67,6 +67,6 @@ class AuthController extends BaseController
     public function logout()
     {
         session()->destroy(); // Destruye toda la data de la sesión
-        return redirect()->to('auth/login');
+        return redirect()->to('login');
     }
 }

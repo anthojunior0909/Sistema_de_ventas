@@ -15,7 +15,7 @@ class AuthFilter implements FilterInterface
         // Si no existe la variable 'isLoggedIn' en la sesión...
         if (!$session->get('isLoggedIn')) {
             // ...lo redirigimos al login (que definiremos como 'auth/login')
-            return redirect()->to('auth/login');
+            return redirect()->to('login');
         }
     }
 
