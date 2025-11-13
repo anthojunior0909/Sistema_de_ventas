@@ -13,3 +13,6 @@ $routes->get('logout', 'AuthController::logout'); // Cierra la sesión
 $routes->get('dashboard', 'DashboardController::index');
 $routes->resource('productos', ['controller' => 'ProductosController']);
 $routes->resource('clientes', ['controller' => 'ClientesController']);
+// Rutas de Ventas
+$routes->get('ventas/nueva', 'VentasController::new'); // Pantalla de venta
+$routes->post('ventas/guardar', 'VentasController::create'); // Guardar venta (AJAX)
