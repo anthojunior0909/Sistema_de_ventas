@@ -79,7 +79,34 @@
 <script>
     $(document).ready(function() {
         $('#tabla-ventas').DataTable({
-            "order": [[ 0, "desc" ]], // Ordenar por ID descendente (lo más nuevo primero)
+            "order": [[ 0, "desc" ]], // Orden descendente (Ventas recientes primero)
+            "dom": 'Bfrtip',          // Activar contenedor de botones
+            "buttons": [
+                {
+                    extend: 'excelHtml5',
+                    text: '<i class="bi bi-file-earmark-excel"></i> Excel',
+                    className: 'btn btn-success btn-sm',
+                    exportOptions: { columns: [0,1,2,3,4] } // Excluir la columna de acciones
+                },
+                {
+                    extend: 'csvHtml5',
+                    text: '<i class="bi bi-filetype-csv"></i> CSV',
+                    className: 'btn btn-primary btn-sm',
+                    exportOptions: { columns: [0,1,2,3,4] }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
+                    className: 'btn btn-danger btn-sm',
+                    exportOptions: { columns: [0,1,2,3,4] }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="bi bi-printer"></i> Imprimir',
+                    className: 'btn btn-secondary btn-sm',
+                    exportOptions: { columns: [0,1,2,3,4] }
+                }
+            ],
             "language": {
                 "processing": "Procesando...",
                 "search": "Buscar:",
