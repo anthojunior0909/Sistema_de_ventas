@@ -8,17 +8,27 @@ use App\Models\ProductoModel;
 use App\Models\ClienteModel;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use App\Models\CajaModel;
 
 class VentasController extends BaseController
 {
     // 1. Mostrar la pantalla de "Nueva Venta"
     public function new()
     {
+        // 1. Verificar Caja Abierta
+        $cajaModel = new CajaModel();
+        $userId = session()->get('user_id');
+        
+        if (!$cajaModel->obtenerCajaAbierta($userId)) {
+            // Si no hay caja, lo mandamos al módulo de caja con un mensaje
+            return redirect()->to('caja')->with('error', '¡Debes abrir caja antes de realizar ventas!');
+        }
+
+        // 2. Si tiene caja, continuamos normal...
         $productoModel = new ProductoModel();
         $clienteModel = new ClienteModel();
 
         $data = [
-            // Enviamos productos y clientes para los selectores
             'productos' => $productoModel->findAll(),
             'clientes'  => $clienteModel->findAll()
         ];
@@ -32,7 +42,17 @@ class VentasController extends BaseController
         if (!$this->request->isAJAX()) {
             return $this->response->setStatusCode(404);
         }
+        // --- VALIDACIÓN DE SEGURIDAD CAJA ---
+        $cajaModel = new CajaModel();
+        $userId = session()->get('user_id');
+        $caja = $cajaModel->obtenerCajaAbierta($userId);
 
+        if (!$caja) {
+            return $this->response->setJSON([
+                'success' => false, 
+                'message' => 'Tu caja está cerrada. No se puede procesar la venta.'
+            ]);
+        }
         $ventaModel = new VentaModel();
         $detalleModel = new DetalleVentaModel();
         $productoModel = new ProductoModel();
@@ -53,9 +73,10 @@ class VentasController extends BaseController
             // A. Guardar la Venta (Cabecera)
             $dataVenta = [
                 'cliente_id'  => $json->cliente_id,
-                'usuario_id'  => session()->get('user_id'), // El usuario logueado
+                'usuario_id'  => $userId,
+                'sesion_id'   => $caja['id'], // <--- AGREGAMOS ESTO (Relacionamos con la caja)
                 'total'       => $json->total,
-                'metodo_pago' => 'efectivo' // Por ahora fijo, luego dinámico
+                'metodo_pago' => 'efectivo'
             ];
             
             $ventaModel->insert($dataVenta);
