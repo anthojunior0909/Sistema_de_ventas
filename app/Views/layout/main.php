@@ -91,9 +91,9 @@
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <span class="navbar-text me-3">
-                                Hola, **<?= session()->get('username') ?>**
-                            </span>
+                            <a href="<?= base_url('perfil') ?>" class="nav-link me-3 text-dark">
+                                Hola, <strong><?= session()->get('username') ?></strong> (Perfil)
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="btn btn-danger" href="<?= base_url('logout') ?>">Cerrar Sesión</a>

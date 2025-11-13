@@ -26,3 +26,6 @@ $routes->post('caja/cerrar', 'CajaController::cerrar');
 // Reportes
 $routes->get('reportes', 'ReportesController::index');
 $routes->post('reportes/excel', 'ReportesController::generarExcel');
+// --- Perfil ---
+$routes->get('perfil', 'PerfilController::index');
+$routes->post('perfil/password', 'PerfilController::updatePassword');
