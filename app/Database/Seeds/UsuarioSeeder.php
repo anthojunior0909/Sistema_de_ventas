@@ -14,7 +14,7 @@ class UsuarioSeeder extends Seeder
         // Datos del usuario admin
         $data = [
             'username' => 'admin',
-            'password_hash' => password_hash('60908700aA', PASSWORD_DEFAULT), // <-- Encriptamos la contraseña
+            'password_hash' => password_hash('admin123', PASSWORD_DEFAULT), // <-- Encriptamos la contraseña
             'role'     => 'admin'
         ];
 
