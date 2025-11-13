@@ -34,7 +34,7 @@
                                 <button class="btn btn-info btn-sm text-white btnVerDetalle" data-id="<?= $v['id'] ?>">
                                     Ver Detalle
                                 </button>
-                                <a href="#" class="btn btn-danger btn-sm">
+                                <a href="<?= base_url('ventas/pdf/' . $v['id']) ?>" target="_blank" class="btn btn-danger btn-sm">
                                     <i class="bi bi-file-pdf"></i> PDF
                                 </a>
                             </td>
