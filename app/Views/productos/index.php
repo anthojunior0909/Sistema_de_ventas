@@ -101,17 +101,57 @@
 <?= $this->section('scripts') ?>
     <script>
         $(document).ready(function() {
-            // Inicializar DataTable
-            var tablaProductos = $('#tabla-productos').DataTable();
+            
+            // 1. Inicializar DataTable (Con Botones)
+            var tablaProductos = $('#tabla-productos').DataTable({
+                "order": [[ 0, "desc" ]],
+                "dom": 'Bfrtip',
+                "buttons": [
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="bi bi-file-earmark-excel"></i> Excel',
+                        className: 'btn btn-success btn-sm'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="bi bi-filetype-csv"></i> CSV',
+                        className: 'btn btn-primary btn-sm'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
+                        className: 'btn btn-danger btn-sm'
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="bi bi-printer"></i> Imprimir',
+                        className: 'btn btn-secondary btn-sm'
+                    }
+                ],
+                "language": {
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ productos",
+                    "infoEmpty": "Mostrando 0 a 0 de 0 productos",
+                    "infoFiltered": "(filtrado de _MAX_ productos totales)",
+                    "loadingRecords": "Cargando...",
+                    "zeroRecords": "No se encontraron resultados",
+                    "emptyTable": "Ningún dato disponible en esta tabla",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Último",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
 
-            // BOTÓN AÑADIR (Con alerta de prueba)
+            // BOTÓN AÑADIR
             $('#btnAnadirProducto').on('click', function() {
-                // alert("¡Botón presionado!"); // Descomenta si quieres probar
-                
                 $('#formProducto')[0].reset();
                 $('#modalLabel').text('Añadir Producto');
                 $('#producto_id').val('');
-                
                 var modal = new bootstrap.Modal(document.getElementById('modalProducto'));
                 modal.show();
             });
@@ -142,7 +182,7 @@
                 });
             });
 
-            // FORMULARIO (GUARDAR / ACTUALIZAR)
+            // FORMULARIO
             $('#formProducto').on('submit', function(e) {
                 e.preventDefault();
                 var productoID = $('#producto_id').val();
@@ -164,7 +204,6 @@
                             alert(response.message);
                             location.reload();
                         } else {
-                            // Muestra errores si los hay
                             var msg = response.message ? response.message : 'Error de validación';
                             if(response.errors) {
                                 msg += '\n' + Object.values(response.errors).join('\n');
@@ -181,7 +220,7 @@
             // ELIMINAR
             $('#tabla-productos').on('click', '.btnEliminar', function() {
                 var productoID = $(this).data('id');
-                if (confirm('¿Estás seguro de eliminar?')) {
+                if (confirm('¿Estás seguro de eliminar este producto?')) {
                     $.ajax({
                         url: "<?= base_url('productos') ?>/" + productoID,
                         type: "POST",
