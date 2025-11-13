@@ -69,7 +69,7 @@
             <a href="<?= base_url('clientes') ?>" class="list-group-item list-group-item-action">
                 Clientes
             </a>
-            <a href="#" class="list-group-item list-group-item-action">
+            <a href="<?= base_url('reportes') ?>" class="list-group-item list-group-item-action">
                 Reportes
             </a>
             <?php if(session()->get('role') == 'admin'): ?>

@@ -23,3 +23,6 @@ $routes->get('ventas/pdf/(:num)', 'VentasController::generarPdf/$1');
 $routes->get('caja', 'CajaController::index');
 $routes->post('caja/abrir', 'CajaController::abrir');
 $routes->post('caja/cerrar', 'CajaController::cerrar');
+// Reportes
+$routes->get('reportes', 'ReportesController::index');
+$routes->post('reportes/excel', 'ReportesController::generarExcel');
