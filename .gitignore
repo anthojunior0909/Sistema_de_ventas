@@ -1,0 +1,11 @@
+# Ignorar configuración de entorno (Secretos)
+.env
+
+# Ignorar dependencias de PHP (se instalan con composer)
+/vendor
+
+# Ignorar carpeta de pruebas y compilados
+/writable
+/tests
+/.idea
+/.vscode
