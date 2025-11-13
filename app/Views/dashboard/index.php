@@ -82,6 +82,47 @@
             </div>
         </div>
     </div>
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-header bg-danger text-white">
+                    <h6 class="m-0 fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> Alerta: Stock Bajo</h6>
+                </div>
+                <div class="card-body">
+                    <?php if(empty($bajoStock)): ?>
+                        <p class="text-success mb-0">¡Todo bien! No hay productos con stock crítico.</p>
+                    <?php else: ?>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Código</th>
+                                        <th>Stock Actual</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($bajoStock as $p): ?>
+                                        <tr>
+                                            <td><?= esc($p['nombre']) ?></td>
+                                            <td><?= esc($p['codigo']) ?></td>
+                                            <td class="text-danger fw-bold"><?= $p['stock'] ?></td>
+                                            <td>
+                                                <a href="<?= base_url('productos') ?>" class="btn btn-xs btn-primary btn-sm">
+                                                    Reponer
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <?= $this->endSection() ?>
 

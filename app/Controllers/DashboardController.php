@@ -46,6 +46,9 @@ class DashboardController extends BaseController
             $fechas[] = date('d/m', strtotime($row['fecha']));
             $montos[] = $row['total'];
         }
+        $productosBajoStock = $productoModel->where('stock <=', 10)
+                                            ->orderBy('stock', 'ASC')
+                                            ->findAll(5); // Solo los 5 más críticos
 
         // Enviamos todo a la vista
         return view('dashboard/index', [
