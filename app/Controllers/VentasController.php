@@ -6,6 +6,8 @@ use App\Models\VentaModel;
 use App\Models\DetalleVentaModel;
 use App\Models\ProductoModel;
 use App\Models\ClienteModel;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class VentasController extends BaseController
 {
@@ -134,5 +136,55 @@ class VentasController extends BaseController
 
             return $this->response->setJSON(['success' => true, 'data' => $detalles]);
         }
+    }
+    // 3. Generar PDF de una venta
+    public function generarPdf($id)
+    {
+        $db = \Config\Database::connect();
+
+        // A. Obtener datos de la Venta (Cabecera)
+        $builder = $db->table('ventas');
+        $builder->select('ventas.*, clientes.nombre as cliente, usuarios.username as vendedor');
+        $builder->join('clientes', 'clientes.id = ventas.cliente_id', 'left');
+        $builder->join('usuarios', 'usuarios.id = ventas.usuario_id', 'left');
+        $builder->where('ventas.id', $id);
+        $venta = $builder->get()->getRowArray();
+
+        if (!$venta) {
+            return "Venta no encontrada";
+        }
+
+        // B. Obtener detalles
+        $builderDetalle = $db->table('detalle_venta');
+        $builderDetalle->select('detalle_venta.*, productos.nombre, productos.codigo');
+        $builderDetalle->join('productos', 'productos.id = detalle_venta.producto_id');
+        $builderDetalle->where('venta_id', $id);
+        $detalles = $builderDetalle->get()->getResultArray();
+
+        // C. Preparar datos para la vista
+        $data = [
+            'venta' => $venta,
+            'detalles' => $detalles
+        ];
+
+        // D. Renderizar HTML
+        $html = view('ventas/ticket', $data);
+
+        // E. Configurar DomPDF
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        
+        // Tamaño ticket (o A4 si prefieres: 'A4', 'portrait')
+        // Usaremos A4 para que se vea bien en pantalla completa
+        $dompdf->setPaper('A4', 'portrait'); 
+
+        $dompdf->render();
+
+        // F. Descargar o Mostrar en navegador (false = mostrar, true = descargar)
+        $dompdf->stream("ticket_venta_$id.pdf", ["Attachment" => false]);
     }
 }
