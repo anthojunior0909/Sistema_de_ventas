@@ -79,9 +79,23 @@
 <script>
     $(document).ready(function() {
         $('#tabla-ventas').DataTable({
-            "order": [[ 0, "desc" ]], // Ordenar por ID descendente
+            "order": [[ 0, "desc" ]], // Ordenar por ID descendente (lo más nuevo primero)
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json"
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ ventas",
+                "infoEmpty": "Mostrando 0 a 0 de 0 ventas",
+                "infoFiltered": "(filtrado de _MAX_ ventas totales)",
+                "loadingRecords": "Cargando...",
+                "zeroRecords": "No se encontraron resultados",
+                "emptyTable": "Ningún dato disponible en esta tabla",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
             }
         });
 
