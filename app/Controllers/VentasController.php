@@ -108,9 +108,7 @@ class VentasController extends BaseController
         $builder->select('ventas.*, clientes.nombre as cliente, usuarios.username as vendedor');
         $builder->join('clientes', 'clientes.id = ventas.cliente_id', 'left');
         $builder->join('usuarios', 'usuarios.id = ventas.usuario_id', 'left');
-        $builder->orderBy('ventas.date', 'DESC'); // Ordenar por fecha (más reciente primero)
-        // Nota: Si tu campo de fecha se llama 'fecha' o 'created_at', ajustalo arriba.
-        // En la migración pusimos 'fecha' TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        
         $builder->orderBy('ventas.fecha', 'DESC'); 
 
         $data = [
