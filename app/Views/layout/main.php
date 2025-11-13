@@ -57,7 +57,7 @@
             <a href="<?= base_url('productos') ?>" class="list-group-item list-group-item-action">
                 Productos
             </a>
-            <a href="#" class="list-group-item list-group-item-action">
+            <a href="<?= base_url('clientes') ?>" class="list-group-item list-group-item-action">
                 Clientes
             </a>
             <a href="#" class="list-group-item list-group-item-action">
