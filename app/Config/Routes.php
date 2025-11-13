@@ -29,3 +29,7 @@ $routes->post('reportes/excel', 'ReportesController::generarExcel');
 // --- Perfil ---
 $routes->get('perfil', 'PerfilController::index');
 $routes->post('perfil/password', 'PerfilController::updatePassword');
+// Usuarios
+$routes->get('usuarios', 'UsuariosController::index');
+$routes->post('usuarios/guardar', 'UsuariosController::create');
+$routes->post('usuarios/eliminar/(:num)', 'UsuariosController::delete/$1');

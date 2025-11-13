@@ -73,7 +73,7 @@
                 Reportes
             </a>
             <?php if(session()->get('role') == 'admin'): ?>
-                <a href="#" class="list-group-item list-group-item-action">
+                <a href="<?= base_url('usuarios') ?>" class="list-group-item list-group-item-action">
                     Usuarios
                 </a>
             <?php endif; ?>
