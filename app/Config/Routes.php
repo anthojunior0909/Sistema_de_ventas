@@ -18,3 +18,4 @@ $routes->get('ventas', 'VentasController::index'); // Historial
 $routes->get('ventas/nueva', 'VentasController::new');
 $routes->post('ventas/guardar', 'VentasController::create');
 $routes->get('ventas/detalle/(:num)', 'VentasController::show/$1'); // Para ver detalle
+$routes->get('ventas/pdf/(:num)', 'VentasController::generarPdf/$1');
