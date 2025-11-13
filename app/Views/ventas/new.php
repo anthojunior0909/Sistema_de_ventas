@@ -118,7 +118,23 @@
         $('#tabla-busqueda').DataTable({
             "pageLength": 5,
             "lengthChange": false,
-            "language": { "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json" }
+            "language": {
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ productos",
+                "infoEmpty": "Mostrando 0 a 0 de 0 productos",
+                "infoFiltered": "(filtrado de _MAX_ productos totales)",
+                "loadingRecords": "Cargando...",
+                "zeroRecords": "No se encontraron resultados",
+                "emptyTable": "Ningún dato disponible en esta tabla",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
         });
 
         // 2. Evento: Clic en botón "+" de un producto
