@@ -19,3 +19,7 @@ $routes->get('ventas/nueva', 'VentasController::new');
 $routes->post('ventas/guardar', 'VentasController::create');
 $routes->get('ventas/detalle/(:num)', 'VentasController::show/$1'); // Para ver detalle
 $routes->get('ventas/pdf/(:num)', 'VentasController::generarPdf/$1');
+// --- Rutas de Caja ---
+$routes->get('caja', 'CajaController::index');
+$routes->post('caja/abrir', 'CajaController::abrir');
+$routes->post('caja/cerrar', 'CajaController::cerrar');

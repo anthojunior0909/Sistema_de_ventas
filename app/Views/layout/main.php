@@ -51,6 +51,9 @@
             <a href="<?= base_url('dashboard') ?>" class="list-group-item list-group-item-action active">
                 Dashboard
             </a>
+            <a href="<?= base_url('caja') ?>" class="list-group-item list-group-item-action">
+                Control de Caja
+            </a>
             <a href="#" class="list-group-item list-group-item-action">
                 Ventas
             </a>
