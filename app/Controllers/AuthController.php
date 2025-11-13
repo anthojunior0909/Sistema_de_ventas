@@ -17,7 +17,7 @@ class AuthController extends BaseController
         }
         
         // La vista 'auth/login' la crearemos en el siguiente paso
-        return view('login');
+        return view('auth/login');
     }
 
     /**
