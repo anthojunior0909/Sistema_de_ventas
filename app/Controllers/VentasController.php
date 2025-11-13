@@ -98,4 +98,43 @@ class VentasController extends BaseController
             return $this->response->setJSON(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
         }
     }
+    // 1. Listado de Ventas (Historial)
+    public function index()
+    {
+        $db = \Config\Database::connect();
+        
+        // Usamos Query Builder para unir tablas y traer nombres en vez de IDs
+        $builder = $db->table('ventas');
+        $builder->select('ventas.*, clientes.nombre as cliente, usuarios.username as vendedor');
+        $builder->join('clientes', 'clientes.id = ventas.cliente_id', 'left');
+        $builder->join('usuarios', 'usuarios.id = ventas.usuario_id', 'left');
+        $builder->orderBy('ventas.date', 'DESC'); // Ordenar por fecha (más reciente primero)
+        // Nota: Si tu campo de fecha se llama 'fecha' o 'created_at', ajustalo arriba.
+        // En la migración pusimos 'fecha' TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        $builder->orderBy('ventas.fecha', 'DESC'); 
+
+        $data = [
+            'ventas' => $builder->get()->getResultArray()
+        ];
+
+        return view('ventas/index', $data);
+    }
+
+    // 2. Ver Detalle de una Venta (AJAX)
+    public function show($id = null)
+    {
+        if ($this->request->isAJAX()) {
+            $db = \Config\Database::connect();
+
+            // A. Traer los productos de esa venta
+            $builder = $db->table('detalle_venta'); // Ojo: singular 'detalle_venta' como corregimos
+            $builder->select('detalle_venta.*, productos.nombre, productos.codigo');
+            $builder->join('productos', 'productos.id = detalle_venta.producto_id');
+            $builder->where('venta_id', $id);
+            
+            $detalles = $builder->get()->getResultArray();
+
+            return $this->response->setJSON(['success' => true, 'data' => $detalles]);
+        }
+    }
 }

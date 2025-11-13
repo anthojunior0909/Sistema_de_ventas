@@ -54,9 +54,11 @@
             <a href="#" class="list-group-item list-group-item-action">
                 Ventas
             </a>
-
             <a href="<?= base_url('ventas/nueva') ?>" class="list-group-item list-group-item-action">
                 Nueva Venta
+            </a>
+            <a href="<?= base_url('ventas') ?>" class="list-group-item list-group-item-action">
+                Ventas / Historial
             </a>
             <a href="<?= base_url('productos') ?>" class="list-group-item list-group-item-action">
                 Productos

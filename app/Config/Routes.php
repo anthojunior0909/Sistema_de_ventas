@@ -13,6 +13,8 @@ $routes->get('logout', 'AuthController::logout'); // Cierra la sesión
 $routes->get('dashboard', 'DashboardController::index');
 $routes->resource('productos', ['controller' => 'ProductosController']);
 $routes->resource('clientes', ['controller' => 'ClientesController']);
-// Rutas de Ventas
-$routes->get('ventas/nueva', 'VentasController::new'); // Pantalla de venta
-$routes->post('ventas/guardar', 'VentasController::create'); // Guardar venta (AJAX)
+// --- Rutas de Ventas ---
+$routes->get('ventas', 'VentasController::index'); // Historial
+$routes->get('ventas/nueva', 'VentasController::new');
+$routes->post('ventas/guardar', 'VentasController::create');
+$routes->get('ventas/detalle/(:num)', 'VentasController::show/$1'); // Para ver detalle
