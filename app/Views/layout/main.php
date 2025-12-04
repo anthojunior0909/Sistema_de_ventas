@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <style>
         body {
@@ -78,16 +79,21 @@
                 </button>
                 
                 <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a href="<?= base_url('perfil') ?>" class="nav-link me-3 text-dark">
-                                Hola, <strong><?= session()->get('username') ?></strong> (Perfil)
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-danger" href="<?= base_url('logout') ?>">Cerrar Sesión</a>
-                        </li>
-                    </ul>
+                <ul class="navbar-nav ms-auto align-items-center"> <li class="nav-item me-3">
+                        <button class="btn btn-sm btn-outline-secondary rounded-circle" id="btnTheme">
+                            <i class="bi bi-moon-fill" id="iconTheme"></i>
+                        </button>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="<?= base_url('perfil') ?>" class="nav-link me-3 text-dark" id="userLabel">
+                            Hola, <strong><?= session()->get('username') ?></strong> (Perfil)
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-danger btn-sm" href="<?= base_url('logout') ?>">Cerrar Sesión</a>
+                    </li>
+                </ul>
                 </div>
             </div>
         </nav>
@@ -119,6 +125,43 @@
 </script>
 
 <?= $this->renderSection('scripts') ?>
+<script>
+    // 1. Lógica para manejar el tema
+    const htmlElement = document.documentElement;
+    const switchButton = document.getElementById('btnTheme');
+    const iconTheme = document.getElementById('iconTheme');
+    const userLabel = document.getElementById('userLabel'); // Para corregir el color del texto "Hola..."
 
+    // Función para aplicar el tema
+    const setTheme = (theme) => {
+        htmlElement.setAttribute('data-bs-theme', theme);
+        localStorage.setItem('theme', theme);
+        
+        // Cambiar ícono y colores específicos
+        if (theme === 'dark') {
+            iconTheme.classList.replace('bi-moon-fill', 'bi-sun-fill');
+            switchButton.classList.replace('btn-outline-secondary', 'btn-outline-light');
+            if(userLabel) userLabel.classList.replace('text-dark', 'text-light');
+        } else {
+            iconTheme.classList.replace('bi-sun-fill', 'bi-moon-fill');
+            switchButton.classList.replace('btn-outline-light', 'btn-outline-secondary');
+            if(userLabel) userLabel.classList.replace('text-light', 'text-dark');
+        }
+    }
+
+    // 2. Detectar preferencia al cargar
+    const savedTheme = localStorage.getItem('theme');
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    
+    // Aplicar el tema guardado o el del sistema
+    setTheme(savedTheme || systemTheme);
+
+    // 3. Evento Click
+    switchButton.addEventListener('click', () => {
+        const currentTheme = htmlElement.getAttribute('data-bs-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        setTheme(newTheme);
+    });
+</script>
 </body>
 </html>

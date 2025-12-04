@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\UsuarioModel; // No olvides importar tu modelo
+use App\Models\UsuarioModel;
 
 class AuthController extends BaseController
 {
