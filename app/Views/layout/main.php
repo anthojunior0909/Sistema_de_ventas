@@ -1,49 +1,46 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
+<html lang="es" data-bs-theme="light"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $this->renderSection('title') ?> | Sistema POS</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
     <link href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <style>
         body {
             display: flex;
             min-height: 100vh;
             flex-direction: column;
-            overflow-x: hidden; /* Evita scroll horizontal al ocultar barra */
+            overflow-x: hidden;
         }
         .wrapper {
             display: flex;
             width: 100%;
             flex-grow: 1;
-            align-items: stretch; /* Estira los elementos */
+            align-items: stretch;
         }
         #sidebar {
             min-width: 250px;
             max-width: 250px;
-            background: #343a40;
+            background: #212529; /* Dark fix */
             color: #fff;
             transition: all 0.3s;
         }
-        
-        /* --- NUEVO: Clase para ocultar la barra --- */
         #sidebar.active {
             margin-left: -250px;
         }
-        /* ----------------------------------------- */
-
         #sidebar .list-group-item {
-            background: #343a40;
-            color: #fff;
+            background: #212529;
+            color: #ccc;
             border: none;
         }
-        #sidebar .list-group-item:hover {
-            background: #495057;
+        #sidebar .list-group-item:hover, #sidebar .list-group-item.active {
+            background: #0d6efd;
+            color: #fff;
         }
         #content {
             width: 100%;
@@ -55,7 +52,7 @@
 <body>
 
 <div class="wrapper">
-    <nav id="sidebar" class="bg-dark text-white p-3">
+    <nav id="sidebar" class="p-3">
         <h4><a href="<?= base_url('dashboard') ?>" class="text-white text-decoration-none">Mi Sistema POS</a></h4>
         
         <div class="list-group list-group-flush mt-3">
@@ -72,28 +69,32 @@
     </nav>
 
     <div id="content">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 shadow-sm">
+        <nav id="topNavbar" class="navbar navbar-expand-lg navbar-light bg-light mb-4 shadow-sm">
             <div class="container-fluid">
-                <button type="button" id="sidebarCollapse" class="btn btn-info text-white">
-                    <span>&#9776;</span>
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="bi bi-list"></i>
                 </button>
                 
                 <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto align-items-center"> <li class="nav-item me-3">
-                        <button class="btn btn-sm btn-outline-secondary rounded-circle" id="btnTheme">
-                            <i class="bi bi-moon-fill" id="iconTheme"></i>
-                        </button>
-                    </li>
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        
+                        <li class="nav-item me-3">
+                            <button class="btn btn-outline-secondary rounded-circle border-0" id="btnTheme">
+                                <i class="bi bi-moon-stars-fill" id="iconTheme"></i>
+                            </button>
+                        </li>
 
-                    <li class="nav-item">
-                        <a href="<?= base_url('perfil') ?>" class="nav-link me-3 text-dark" id="userLabel">
-                            Hola, <strong><?= session()->get('username') ?></strong> (Perfil)
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-danger btn-sm" href="<?= base_url('logout') ?>">Cerrar Sesión</a>
-                    </li>
-                </ul>
+                        <li class="nav-item">
+                            <a href="<?= base_url('perfil') ?>" class="nav-link me-3 fw-bold">
+                                Hola, <?= session()->get('username') ?>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-danger btn-sm" href="<?= base_url('logout') ?>">
+                                <i class="bi bi-box-arrow-right"></i> Salir
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -108,6 +109,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
+
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.bootstrap5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -118,50 +120,49 @@
 
 <script>
     $(document).ready(function () {
+        // Toggle Sidebar
         $('#sidebarCollapse').on('click', function () {
             $('#sidebar').toggleClass('active');
+        });
+
+        // --- LÓGICA TEMA OSCURO ---
+        const htmlElement = document.documentElement;
+        const switchButton = document.getElementById('btnTheme');
+        const iconTheme = document.getElementById('iconTheme');
+        const topNavbar = document.getElementById('topNavbar');
+
+        // Función para aplicar tema
+        const setTheme = (theme) => {
+            htmlElement.setAttribute('data-bs-theme', theme);
+            localStorage.setItem('theme', theme);
+
+            if (theme === 'dark') {
+                iconTheme.className = 'bi bi-sun-fill'; // Icono Sol
+                // Cambiar Barra Superior a Oscura
+                topNavbar.classList.remove('navbar-light', 'bg-light');
+                topNavbar.classList.add('navbar-dark', 'bg-dark');
+            } else {
+                iconTheme.className = 'bi bi-moon-stars-fill'; // Icono Luna
+                // Cambiar Barra Superior a Clara
+                topNavbar.classList.remove('navbar-dark', 'bg-dark');
+                topNavbar.classList.add('navbar-light', 'bg-light');
+            }
+        }
+
+        // Detectar preferencia guardada
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        // Click en el botón
+        switchButton.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-bs-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            setTheme(newTheme);
         });
     });
 </script>
 
 <?= $this->renderSection('scripts') ?>
-<script>
-    // 1. Lógica para manejar el tema
-    const htmlElement = document.documentElement;
-    const switchButton = document.getElementById('btnTheme');
-    const iconTheme = document.getElementById('iconTheme');
-    const userLabel = document.getElementById('userLabel'); // Para corregir el color del texto "Hola..."
 
-    // Función para aplicar el tema
-    const setTheme = (theme) => {
-        htmlElement.setAttribute('data-bs-theme', theme);
-        localStorage.setItem('theme', theme);
-        
-        // Cambiar ícono y colores específicos
-        if (theme === 'dark') {
-            iconTheme.classList.replace('bi-moon-fill', 'bi-sun-fill');
-            switchButton.classList.replace('btn-outline-secondary', 'btn-outline-light');
-            if(userLabel) userLabel.classList.replace('text-dark', 'text-light');
-        } else {
-            iconTheme.classList.replace('bi-sun-fill', 'bi-moon-fill');
-            switchButton.classList.replace('btn-outline-light', 'btn-outline-secondary');
-            if(userLabel) userLabel.classList.replace('text-light', 'text-dark');
-        }
-    }
-
-    // 2. Detectar preferencia al cargar
-    const savedTheme = localStorage.getItem('theme');
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    
-    // Aplicar el tema guardado o el del sistema
-    setTheme(savedTheme || systemTheme);
-
-    // 3. Evento Click
-    switchButton.addEventListener('click', () => {
-        const currentTheme = htmlElement.getAttribute('data-bs-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        setTheme(newTheme);
-    });
-</script>
 </body>
 </html>
